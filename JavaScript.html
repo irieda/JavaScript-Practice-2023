@@ -1,0 +1,403 @@
+<!--
+    JavaScript.html
+    ver.2
+    2022/11/11 0:00
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript命令一覧</title>
+    <style type="text/css">
+        html{
+            margin: 0;
+            padding: 0;
+        }
+        .toggle {
+            display: none;
+        }
+        .label {		/*タイトル*/
+            padding: 12px;
+            display: block;
+            color: white;
+            background:rgb(100,150,200);
+        }
+        .label::before{		/*タイトル横の矢印*/
+            content:"";
+            width: 6px;
+            height: 6px;
+            border-top: 2px solid #fff;
+            border-right: 2px solid #fff;
+            -webkit-transform: rotate(45deg);
+            position: absolute;
+            top:calc( 50% - 3px );
+            right: 20px;
+            transform: rotate(135deg);
+        }
+        .label,
+        .content {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            transition: all 0.5s;
+        }
+        .content {		/*本文*/
+            height: 0;
+            margin-bottom:5px;
+            padding:0 20px;
+            overflow: hidden;
+        }
+        .toggle:checked + .label + .content {	/*開閉時*/
+            height: auto;
+            padding: 10px ;
+            transition: all .5s;
+        }
+        .toggle:checked + .label::before {
+            transform: rotate(-45deg) !important;
+        }
+        h1{
+            text-align: center;
+        }
+        #container{
+            min-width: 900px;
+            display: flex;
+            justify-content: center;
+        }
+        aside{
+            width: 360px;
+            min-width: 360px;
+            background-color: rgb(220, 255, 255);
+        }
+        aside section{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style:none;
+            padding: 0px;
+        }
+        aside section ul li{
+            border: 2px solid rgb(0,0,0);
+            padding: 5px;
+            text-align: center;
+            border-radius: 20px;
+            margin: 5px;
+            text-decoration: none;
+            cursor:pointer;
+            color: black;
+        }
+        #output ul li{
+            background-color: rgb(250, 250, 150);
+        }
+        #input ul li{
+            background-color: rgb(250, 150, 250);
+        }
+        #syntax ul li{
+            background-color: rgb(150, 250, 250);
+        }
+        #time ul li{
+            background-color: rgb(250, 200, 200);
+        }
+        #declaration ul li{
+            background-color: rgb(200, 250, 200);
+        }
+        #random ul li{
+            background-color: rgb(200, 200, 250);
+        }
+        main{
+            width: 540px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            background-color: rgb(220,255,255);
+        }
+        #explanation{
+            margin: 10px;
+            padding: 5px;
+            width: 520px;
+            background-color: rgb(255,255,255);
+        }
+        .code{
+            width: 480px;
+            font-size: 18px;
+            padding:1em;
+            background-color:black;
+            color :#FFF;
+        }
+        img{
+            width: 500px;
+            height: 360px;
+            text-align: right;
+        }
+        .getFlash{
+            animation: flash 1s linear;
+        }
+        @keyframes flash{
+            0% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+    }
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript命令一覧</h1>
+    <div id="container">
+        <aside>
+            <input id="block-01" name="accordion" type="checkbox" class="toggle">
+            <label class="label" for="block-01">表示する</label>
+            <section id="output" class="content">
+                <ul>
+                    <li class="flash" onclick="clicked(this);">コンソールに文字を表示する</li>
+                    <li class="flash" onclick="clicked(this);">Canvasに文字を表示する</li>
+                    <li class="flash" onclick="clicked(this);">Canvasに画像を表示する</li>
+                    <li class="flash" onclick="clicked(this);">Canvasに矩形を表示する</li>
+                    <li class="flash" onclick="clicked(this);">Canvasに円を表示する</li>
+                    <li class="flash" onclick="clicked(this);">Canbasに線を表示する</li>
+                </ul>
+            </section>
+            <input id="block-02" name="accordion" type="checkbox" class="toggle">
+            <label class="label" for="block-02">受け取る</label>
+            <section id="input" class="content">
+                <ul>
+                    <li class="flash" onclick="clicked(this);">テキストボックスから文字を受け取る</li>
+                    <li class="flash" onclick="clicked(this);">ボタンがクリックされたことを受け取る</li>
+                    <li class="flash" onclick="clicked(this);">Canvasがクリックされたことを受け取る</li>
+                    <li class="flash" onclick="clicked(this);">キーが下がっていることを受け取る</li>
+                    <li class="flash" onclick="clicked(this);">キーが上がったことを受け取る</li>
+                </ul>
+            </section>
+            <input id="block-03" name="accordion" type="checkbox" class="toggle">
+            <label class="label" for="block-03">構文</label>
+            <section id="syntax" class="content">
+                <ul>
+                    <li class="flash" onclick="clicked(this);">条件分岐(if文，分岐１つ)</li>
+                    <li class="flash" onclick="clicked(this);">条件分岐(if文，分岐２つ)</li>
+                    <li class="flash" onclick="clicked(this);">条件分岐(if文，分岐３つ)</li>
+                    <li class="flash" onclick="clicked(this);">条件分岐(switch文)</li>
+                    <li class="flash" onclick="clicked(this);">繰り返し(for文)</li>
+                    <li class="flash" onclick="clicked(this);">繰り返し(while文)</li>
+                    <li class="flash" onclick="clicked(this);">関数</li>
+                </ul>
+            </section>
+            <input id="block-04" name="accordion" type="checkbox" class="toggle">
+            <label class="label" for="block-04">時間</label>
+            <section id="time" class="content">
+                <ul>
+                    <li class="flash" onclick="clicked(this);">ミリ秒間待機</li>
+                    <li class="flash" onclick="clicked(this);">ミリ秒間繰り返し</li>
+                </ul>
+            </section>
+            <input id="block-05" name="accordion" type="checkbox" class="toggle">
+            <label class="label" for="block-05">宣言</label>
+            <section id="declaration" class="content">
+                <ul>
+                    <li class="flash" onclick="clicked(this);">変数を宣言する</li>
+                    <li class="flash" onclick="clicked(this);">配列を宣言する</li>
+                </ul>
+            </section>
+            <input id="block-06" name="accordion" type="checkbox" class="toggle">
+            <label class="label" for="block-06">ランダム</label>
+            <section id="random" class="content">
+                <ul>
+                    <li class="flash" onclick="clicked(this);">0以上1未満の乱数を受け取る</li>
+                    <li class="flash" onclick="clicked(this);">0以上5未満の乱数を受け取る</li>
+                    <li class="flash" onclick="clicked(this);">0～4の整数値の乱数を受け取る</li>
+                    <li class="flash" onclick="clicked(this);">1～5の整数値の乱数を受け取る</li>
+                </ul>
+            </section>
+        </aside>
+        <main>
+            <section id="explanation">
+                <h3 id="commandName">命令名</h2>
+                <pre class="code flash" id="code" onclick="copy(this.innerText);">ここをクリックすると内容をコピーできます。</pre>
+                <h4 id="howToUseTitle">使い方</h4>
+                <p id="howToUse">←命令をクリックしても命令をコピーできます。<br>そのまま貼り付けて使えます。</p>
+                <h4 id="codeExampleTitle">例</h4>
+                <pre class="code flash" id="codeExample" onclick="copy(this.innerText);">ここをクリックすると内容をコピーできます。</pre>
+            </section>
+        </main>
+    </div>
+    <script>
+        let code;
+        let howToUse;
+        let codeExample;
+        function copy(comment){
+            navigator.clipboard.writeText(comment);
+        }
+        function getInfo(el){
+            switch (el.innerHTML) {
+                //表示する
+                case 'コンソールに文字を表示する':
+                    code='console.log(文字列または値);';
+                    howToUse='・文字列は「"（ダブルクォーテーション）」で囲う必要があります。<br>数値は「"（ダブルクォーテーション）」で囲う必要がありません。<br>文字列は文字と文字（または数値）をつなぐ場合には「+」を使います。<br>・プログラムが正しく動いているかを確認するときに使います。<br>・コンソールはプレビュー画面右上のハンバーガーメニュー→Devtoolsウィンドウを開く→Consoleタブで見れます。';
+                    codeExample='var age=16;\nconsole.log("私の年齢は" + age + "です。");';
+                    break;
+                case 'Canvasに文字を表示する':
+                    code='text(文字列または値,x座標,y座標,"色",大きさ);';
+                    howToUse='・文字列は「"（ダブルクォーテーション）」で囲う必要があります。<br>数値は「"（ダブルクォーテーション）」で囲う必要がありません。<br>文字列は文字と文字（または数値）をつなぐ場合には「+」を使います。<br>・座標は文字の左上の座標を指定します。Canvasの座標は左上が原点(0,0)で、xは右向きが正、yは下向きが正になっています。初期設定は原点です。<br>・色はダブルクォーテーションで囲み、rgb()で指定します。初期設定は黒です。<br>・大きさは文字の大きさを指定します。初期設定は16です。';
+                    codeExample='text("こんにちは",0,0,"rgb(0,0,0)",20);';
+                    break;
+                case 'Canvasに画像を表示する':
+                    code='img("ファイル名",x座標,y座標,幅,高さ);';
+                    howToUse='・ファイル名は「"（ダブルクォーテーション）」で囲う必要があります。拡張子も必要です。<br>・座標は画像の左上の座標を指定します。Canvasの座標は左上が原点(0,0)で、xは右向きが正、yは下向きが正になっています。初期設定は原点です。<br>・幅と高さで画像の表示サイズを指定します。初期設定は幅14、高さ18です。<br>・プログラム実行中にはじめて表示する画像は読み込みに少し時間がかかります。';
+                    codeExample='img("下1.png",100,100,14*2,18*2);';
+                    break;
+                case 'Canvasに矩形を表示する':
+                    code='rect(x座標,y座標,幅,高さ,"色",塗りつぶし,線の太さ);';
+                    howToUse='・座標は矩形の左上の座標を指定します。Canvasの座標は左上が原点(0,0)で、xは右向きが正、yは下向きが正になっています。初期設定は原点です。<br>・幅と高さで矩形の表示サイズを指定します。初期設定は幅400、高さ400です。<br>・色はダブルクォーテーションで囲み、rgb()で指定します。初期設定は白です。<br>・塗りつぶしは、塗りつぶす場合はtrue、塗りつぶさない場合はfalseを指定します。初期設定はtrueです。<br>・線の太さは塗りつぶさない場合に指定します。初期設定は1です。<br>・rect()で全画面クリアできます。';
+                    codeExample='rect(50,50,300,100,"rgb(255,0,0)",false,5);';
+                    break;
+                case 'Canvasに円を表示する':
+                    code='circle(x座標,y座標,半径,"色",塗りつぶし,線の太さ);';
+                    howToUse='・座標は矩形の左上の座標を指定します。Canvasの座標は左上が原点(0,0)で、xは右向きが正、yは下向きが正になっています。<br>・半径は円の半径を指定します。<br>・色は・色はダブルクォーテーションで囲み、rgb()で指定します。初期設定は黒です。<br>・塗りつぶしは、塗りつぶす場合はtrue、塗りつぶさない場合はfalseを指定します。初期設定はtrueです。<br>・線の太さは塗りつぶさない場合に指定します。初期設定は1です。';
+                    codeExample='circle(50,100,50,"rgb(0,255,0)",false,5);';
+                    break;
+                case 'Canbasに線を表示する':
+                    code='line(x1座標,y1座標,x2座標,y2座標,"色",線の太さ);';
+                    howToUse='・座標は直線の始点と終点の座標を指定します。Canvasの座標は左上が原点(0,0)で、xは右向きが正、yは下向きが正になっています。<br>・色はダブルクォーテーションで囲み、rgb()で指定します。初期設定は黒です。<br>・線の太さを指定します。初期設定は1です。';
+                    codeExample='line(50,150,300,250,"rgb(0,0,255)",5);';
+                    break;
+                //受け取る
+                case 'テキストボックスから文字を受け取る':
+                    code='//htmlのbody要素内\n&lt;input id="id名" type="text"&gt;\n\n//ソースコード\nvar 変数=input("id名");';
+                    howToUse='・htmlのbody要素内にinput要素をid名を付けて作成しておく必要があります。<br>・id名はダブルクォーテーションで囲んで指定します。';
+                    codeExample='//htmlのbody要素内\n&lt;input id="inp1" type="text"&gt;\n\n//ソースコード\nvar a=input("inp1");\ntext(a);';
+                    break;
+                case 'ボタンがクリックされたことを受け取る':
+                    code='//htmlのbody要素内\n&lt;button id="id名"&gt;ボタン表示&lt;/button&gt;\n\n//ソースコード\nonClick("id名",関数名);\nfunction 関数名(e){\n    処理;\n}';
+                    howToUse='・一度書いておけば、ボタンがクリックされるたびに関数の処理が行われます。何度も書いてはいけません。<br>・htmlのbody要素内にbutton要素をid名を付けて作成しておく必要があります。<br>・id名はダブルクォーテーションで囲んで指定します。<br>・関数名はダブルクォーテーションは必要なく、func()という関数の場合はfuncを指定します。引数は指定できません。';
+                    codeExample='//htmlのbody要素内\n&lt;button id="btn1"&gt;押す&lt;/button&gt;\n\n//ソースコード\nonClick("btn1",push);\nfunction push(e){\n    text("ボタン押したよ。");\n}';
+                    break;
+                case 'Canvasがクリックされたことを受け取る':
+                    code='onClick("canvas",関数名);\nfunction 関数名(e){\n    var x=clickX(e);\n    var y=clickY(e);\n    処理;\n}';
+                    howToUse='・一度書いておけば、ボタンがクリックされるたびに関数の処理が行われます。何度も書いてはいけません。<br>・関数名はダブルクォーテーションは必要なく、func()という関数の場合はfuncを指定します。引数は指定できません。<br>・clickX(e)でクリックされたx座標、clickY(e)でクリックされたy座標を取得できます。';
+                    codeExample='onClick("canvas",writeXY);\nfunction writeXY(e){\n    rect();\n    text(clickX(e)+","+clickY(e));\n}';
+                    break;
+                case 'キーが下がっていることを受け取る':
+                    code='onKeyDown(関数名);\nfunction 関数名(e){\n    処理;\n}';
+                    howToUse='・一度書いておけば、ボタンがクリックされるたびに関数の処理が行われます。何度も書いてはいけません。<br>・関数名はダブルクォーテーションは必要なく、func()という関数の場合はfuncを指定します。引数は指定できません。<br>・関数のブロック内では、e.keyで押されたキーを取得できます。';
+                    codeExample='onKeyDown(keyDown);\nfunction keyDown(e){\n    rect();\n    text(e.key);\n}';
+                    break;
+                case 'キーが上がったことを受け取る':
+                    code='onKeyUp(関数名);\nfunction 関数名(e){\n    処理;\n}';
+                    howToUse='・一度書いておけば、ボタンがクリックされるたびに関数の処理が行われます。何度も書いてはいけません。<br>・関数名はダブルクォーテーションは必要なく、func()という関数の場合はfuncを指定します。引数は指定できません。<br>・関数のブロック内では、e.keyで押されたキーを取得できます。';
+                    codeExample='onKeyUp(keyUp);\nfunction keyUp(e){\n    rect();\n    text(e.key);\n}';
+                    break;
+                //構文
+                case '条件分岐(if文，分岐１つ)':
+                    code='if (条件式){\n    条件式を満たした場合の処理;\n}';
+                    howToUse='・条件式には、比較演算子を使った式などを書きます。<br>・処理の部分には命令を書きます。';
+                    codeExample='if (Math.random()<0.5){\n    text("当たり");\n}';
+                    break;
+                case '条件分岐(if文，分岐２つ)':
+                    code='if (条件式){\n    条件式を満たした場合の処理;\n}\nelse{\n    条件式を満たさなかった場合の処理;\n}';
+                    howToUse='・条件式には、比較演算子を使った式などを書きます。<br>・処理の部分には命令を書きます。';
+                    codeExample='if (Math.random()<0.5){\n    text("当たり");\n}\nelse{\n    text("はずれ");\n}';
+                    break;
+                case '条件分岐(if文，分岐３つ)':
+                    code='if (条件式1){\n    条件式1を満たした場合の処理;\n}\nelse if (条件式2){\n    条件式2を満たした場合の処理;\n}\nelse{\n    条件式を満さなかった場合の処理\n}';
+                    howToUse='・条件式には、比較演算子を使った式などを書きます。<br>・処理の部分には命令を書きます。<br>・else ifは条件式を変えて複数回使うことで、より多くの分岐を作ることも出来ます。<br>・条件式は上から処理されていき、trueになったらそれ以降の分岐は無視されます。';
+                    codeExample='var a=Math.random();\nif (a<1/3){\n    text("大吉");\n}\nelse if (a<2/3){\n    text("中吉");\n}\nelse{\n    text("小吉");\n}';
+                    break;
+                case '条件分岐(switch文)':
+                    code='switch (式){\ncase 値1:\n    式が値1と等しいの場合の処理;\n    break;\ncase 値2:\n    式が値2と等しい場合の処理;\n    break;\ndefault:\n    式がいずれの値とも一致しない場合の処理;\n}';
+                    howToUse='・式の取り得る値が1～10個程度の場合は、switch文で分岐させることもできます。<br>・break文を書かなかった場合、次の分岐の処理も行われます。<br>・default文は不要であれば書かなくて構いません。';
+                    codeExample='switch (Math.floor(Math.random()*3)){\ncase 0:\n    text("大吉");\n    break;\ncase 1:\n    text("中吉");\n    break;\ndefault:\n    text("小吉");\n}';
+                    break;                    
+                case '繰り返し(for文)':
+                    code='for(var 変数=開始の値;変数<=終了の値;変数++){\n    繰り返す処理;\n}';
+                    howToUse='・{}の間の処理を繰り返すたびに変数の値を1ずつ増やし、変数の値が開始の値から終了の値になるまで繰り返し処理を行います。';
+                    codeExample='for(var i=1;i<=5;i++){\n    rect();\n    text(i);\n    await wait(1000);\n}';
+                    break;
+                case '繰り返し(while文)':
+                    code='while(条件式){\n    繰り返す処理;\n}';
+                    howToUse='・条件式を満たしている間は処理を繰り返します。<br>・式は&&や||を用いて複数条件を組み合わせることもできます。&&は「かつ」、||は「または」の意味です。<br>・While文の中でbreak;を行うと繰り返しから抜けることができます。<br>・必ず終わるような条件にしておかないと無限ループになります。<br>・無限ループでは処理に待機await wait(ミリ秒);を入れておかないとビジー状態になるので注意してください。';
+                    codeExample='var x=0;\nwhile(true){\n    rect();\n    text(x);\n    x++;\n    await wait(1);\n}';
+                    break;
+                case '関数':
+                    code='function 関数名(引数){\n    処理;\n    return 戻り値;\n}';
+                    howToUse='・引数が複数ある時はコンマで区切って書きます。<br>・引数やreturn文は省略可能です。<br>・return文を使うと、関数内で処理した結果を戻り値として返すことができます。<br>・関数を呼び出すときは、「関数名(引数)」の形で呼び出します。引数は省略できますが、()は省略できません。';
+                    codeExample='yohou("晴れ");\nfunction yohou(tenki){\n    text("今日の天気は"+tenki+"です。");\n}';
+                    break;
+                //時間
+                case 'ミリ秒間待機':
+                    code='await wait(ミリ秒);';
+                    howToUse='・ミリ秒には、待機したい時間(ミリ秒)を入れます。<br>';
+                    codeExample='await wait(1000);';
+                    break;
+                case 'ミリ秒間繰り返し':
+                    code='var 開始時刻=Date.now();\nwhile(Date.now()<開始時刻+ミリ秒){\n    繰り返す処理;\n    await wait(1);\n}';
+                    howToUse='・ミリ秒には、繰り返したい時間(ミリ秒)をいれます。<br>・Date.now 関数は、協定世界時1970年0時0分からの経過時間をミリ秒で表しています。<br>・await wait(1)を入れることで、無限ループ中もビジー状態を回避できます。';
+                    codeExample='var start=Date.now();\nwhile(Date.now()&lt;start+5000){\n    rect();\n    text(Date.now());\n    await wait(1);\n}';
+                    break;
+                //宣言
+                case '変数を宣言する':
+                    code='var 変数名;';
+                    howToUse='・変数は文字や数値を入れておく箱のようなものです。<br>・同じ変数名の宣言は１度で構いません。<br>・文字や数値を入れるには代入をします。';
+                    codeExample='var hensuu;\nhensuu=1;';
+                    break;
+                case '配列を宣言する':
+                    code='var 変数名=[];';
+                    howToUse='・複数の値を１つの変数名で扱うことができます。<br>・配列の添え字番号は0から始まります。';
+                    codeExample='var array=[];\narray[0]="兵庫";\narray[1]="大阪";\narray[2]="奈良";\ntext(array[1]);';
+                    break;
+                //ランダム
+                case '0以上1未満の乱数を受け取る':
+                    code='var 変数名 = Math.random();';
+                    howToUse='・Math.random()は0以上1未満の乱数を返します。';
+                    codeExample='var rnd=Math.random();\ntext(rnd);';
+                    break;
+                case '0以上5未満の乱数を受け取る':
+                    code='var 変数名 = Math.random() * 5;';
+                    howToUse='・Math.random()は0以上1未満の乱数を返します。';
+                    codeExample='var rnd=Math.random()*5;\ntext(rnd);';
+                    break;
+                case '0～4の整数値の乱数を受け取る':
+                    code='var 変数名 = Math.floor(Math.random() * 5);';
+                    howToUse='・Math.random()は0以上1未満の乱数を返します。<br>・Math.floor(実数)は実数の小数部を切り捨てて整数にします。';
+                    codeExample='var rnd=Math.floor(Math.random()*5);\ntext(rnd);';
+                    break;
+                case '1～5の整数値の乱数を受け取る':
+                    code='var 変数名 = Math.floor(Math.random() * 5) + 1;';
+                    howToUse='・Math.random()は0以上1未満の乱数を返します。<br>・Math.floor(実数)は実数の小数部を切り捨てて整数にします。';
+                    codeExample='var rnd=Math.floor(Math.random()*5)+1;\ntext(rnd);';
+                    break;
+                default:
+                    break;
+            }
+        }
+        function clicked(el){
+            let titleEl=document.getElementById('commandName');
+            let codeEl=document.getElementById('code');
+            let howToUseTitleEl=document.getElementById('howToUseTitle');
+            let howToUseEl=document.getElementById('howToUse');
+            let codeExampleTitleEl=document.getElementById('codeExampleTitle');
+            let codeExampleEl=document.getElementById('codeExample');
+            getInfo(el);
+            titleEl.innerHTML=el.innerHTML;
+            codeEl.innerHTML=code;
+            howToUseTitleEl.innerHTML="使い方";
+            howToUseEl.innerHTML=howToUse;
+            codeExampleTitleEl.innerHTML="例";
+            codeExampleEl.innerHTML=codeExample;
+            copy(code);
+        }
+        let flashClass=document.getElementsByClassName("flash");
+        for(let i=0;i<flashClass.length;i++){
+            let element=flashClass[i];
+            element.addEventListener("click",function(){
+                element.classList.add('getFlash');
+                setTimeout(function() {
+                    element.classList.remove('getFlash');
+                }, 1000);
+            });
+        }
+    </script>
+</body>
+</html>

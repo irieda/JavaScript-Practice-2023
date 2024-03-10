@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>JavaScript4</title>
+</head>
+<body>
+    <p>矢印キーで移動します。Shiftキーで加速します。</p>
+    <p>緑の玉から逃げてください。</p>
+    <canvas id="canvas"></canvas>
+    <script src="script.js"></script>
+    <script>
+(async function(){
+//ソースコードここから
+var gameMode=0;
+var gameStartTime=0;
+var gameNowTime=0;
+var heroW=14*2;
+var heroH=18*2;
+var enemyR=40;
+var enemies=[];
+var enemyPrepTime=2000;
+var x=(WIDTH-heroW)/2;
+var y=(HEIGHT-heroH)/2;
+var dx=0;
+var dy=0;
+var spd=1;
+var boostCnt=100;
+var isUp=false;
+var isDown=false;
+var isLeft=false;
+var isRight=false;
+var isShift=false;
+var isSpace=false;
+var walkCnt=0;
+var walkDirection="下";
+class Enemy{
+    constructor(x,y,r){
+        var direction=Math.PI*2*Math.random();
+        this.dx=Math.cos(direction);
+        this.dy=Math.sin(direction);
+        this.spd=3;
+        this.r=r||10;
+        this.x=x||Math.random()*(WIDTH-this.r*2)+this.r;
+        this.y=y||Math.random()*(HEIGHT-this.r*2)+this.r;
+        this.birthTime=gameNowTime;
+    }
+    get time(){
+        return gameNowTime-this.birthTime;
+    }
+    move(){
+        if(this.x-this.r+this.dx<0||this.x+this.r+this.dx>WIDTH)this.dx*=-1;
+        if(this.y-this.r+this.dy<0||this.y+this.r+this.dy>WIDTH)this.dy*=-1;
+        this.x+=this.dx*this.spd;
+        this.y+=this.dy*this.spd;
+    }
+    hit(x,y,r){
+        var result=false;
+        if((this.x-x)**2+(this.y-y)**2<(this.r+r)**2)result=true;
+        return result;
+    }
+
+}
+onKeyDown(keydown);
+function keydown(e){
+    switch(e.key){
+        case "ArrowUp":
+            isUp=true;
+            break;
+        case "ArrowDown":
+            isDown=true;
+            break;
+        case "ArrowLeft":
+            isLeft=true;
+            break;
+        case "ArrowRight":
+            isRight=true;
+            break;
+        case "Shift":
+            isShift=true;
+            break;
+    };
+}
+onKeyUp(keyup);
+function keyup(e){
+    switch(e.key){
+        case "ArrowUp":
+            isUp=false;
+            break;
+        case "ArrowDown":
+            isDown=false;
+            break;
+        case "ArrowLeft":
+            isLeft=false;
+            break;
+        case "ArrowRight":
+            isRight=false;
+            break;
+        case "Shift":
+            isShift=false;
+            break;
+        case " ":
+            isSpace=true;
+            break;
+    };
+}
+function getGameTime(){
+    return gameNowTime-gameStartTime;
+}
+function collisionDetection(){
+    var enemy;
+    for(var i=0;i<enemies.length;i++){
+        enemy=enemies[i];
+        if(enemy.time>enemyPrepTime){
+            if(enemy.hit(x+heroW/2,y+heroH/2,heroW/2)){
+                gameMode++;
+            }
+        }
+    }
+}
+function moveHero(){
+    dx=0;
+    dy=0;
+    if(isShift){
+        if(boostCnt>0){
+            boostCnt-=1;
+            spd=2;
+        }
+        else{
+            spd=1;
+        }
+    }
+    else{
+        if(boostCnt<100)boostCnt+=1;
+        spd=1;
+    }       
+    if(isUp)   dy-=spd;
+    if(isDown) dy+=spd;
+    if(isLeft) dx-=spd;
+    if(isRight)dx+=spd;
+    if(dx==0){
+        if(dy<0)walkDirection="上";
+        if(dy>0)walkDirection="下";
+    }
+    if(dy==0){
+        if(dx<0)walkDirection="左";
+        if(dx>0)walkDirection="右";
+    }
+    if(dx!=0||dy!=0)walkCnt+=1;
+    else walkCnt=0;
+    if(x+dx<0||WIDTH-heroW<x+dx)dx=0;
+    if(y+dy<0||HEIGHT-heroH<y+dy)dy=0;
+    x+=dx;
+    y+=dy;
+}
+function moveEnemy(){
+    var enemy;
+    if(getGameTime()>enemies.length*4000)enemies.push(new Enemy());
+    for(var i=0;i<enemies.length;i++){
+        enemy=enemies[i];
+        if(enemy.time>enemyPrepTime){
+            enemy.move();
+        }
+    }
+}
+function drawHero(){
+    var interval=5;
+    var cnt=Math.floor((walkCnt+2*interval)/interval)%4+1;
+    img(walkDirection+cnt+".png",x,y,heroW,heroH);
+}
+function drawEnemy(){
+    var enemy;
+    var color;
+    for(var i=0;i<enemies.length;i++){
+        enemy=enemies[i];
+        if(enemy.time<=enemyPrepTime)color="rgba(0,220,0,"+enemy.time/enemyPrepTime+")";
+        else color="rgb(0,220,0)";
+        circle(enemy.x,enemy.y,enemy.r,color);
+    }
+}
+function drawBoostMeter(){
+    rect(10,400-10-24,104,24,"rgba(0,0,0,0.5)",false);
+    rect(12,400-10-24+2,boostCnt,20,"rgba(200,200,0,0.5)");
+}
+function drawGameTime(){
+    text(getGameTime(),10,10);
+}
+while(true){
+    rect();
+    switch(gameMode){
+    case 0:
+        drawHero();
+        drawBoostMeter();
+        text("press space key",135,160);
+        if(isSpace){
+            gameMode++;
+            gameStartTime=Date.now();
+            isSpace=false;
+        }
+        break;
+    case 1:
+        gameNowTime=Date.now();
+        collisionDetection();
+        moveHero();
+        moveEnemy();
+        drawHero();
+        drawEnemy();
+        drawBoostMeter();
+        drawGameTime();
+        if(getGameTime()<2000)text("start!",200-22,160);
+        break;
+    case 2:
+        drawHero();
+        drawEnemy();
+        drawBoostMeter();
+        drawGameTime();
+        text("Game is Over!",200-60,160,"rgb(255,0,0)");
+        text("press space key",135,200);
+        if(isSpace){
+            gameMode=0;
+            enemies=[];
+            x=(WIDTH-heroW)/2;
+            y=(HEIGHT-heroH)/2;
+            dx=0;
+            dy=0;
+            spd=1;
+            boostCnt=100;
+            isSpace=false;
+            walkCnt=0;
+            walkDirection="下";
+        }
+    }
+    await wait(20);
+}
+
+
+//ここまで
+})()
+    </script>
+</body>
+</html>

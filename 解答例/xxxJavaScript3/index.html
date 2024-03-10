@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>JavaScript3</title>
+</head>
+<body>
+    <p>矢印キーで移動します</p>
+    <canvas id="canvas"></canvas>
+    <script src="script.js"></script>
+    <script>
+(async function(){
+//ソースコードここから
+var charaW=14*2;
+var charaH=18*2;
+var x=(WIDTH-charaW)/2;
+var y=(HEIGHT-charaH)/2;
+var dx=0;
+var dy=0;
+var isUp=false;
+var isDown=false;
+var isLeft=false;
+var isRight=false;
+var walkCnt=0;
+var walkDirection="下";
+onKeyDown(keydown);
+function keydown(e){
+    switch(e.key){
+        case "ArrowUp":
+            isUp=true;
+            break;
+        case "ArrowDown":
+            isDown=true;
+            break;
+        case "ArrowLeft":
+            isLeft=true;
+            break;
+        case "ArrowRight":
+            isRight=true;
+            break;
+    };
+}
+onKeyUp(keyup);
+function keyup(e){
+    switch(e.key){
+        case "ArrowUp":
+            isUp=false;
+            break;
+        case "ArrowDown":
+            isDown=false;
+            break;
+        case "ArrowLeft":
+            isLeft=false;
+            break;
+        case "ArrowRight":
+            isRight=false;
+            break;
+    };
+}
+while(true){
+    rect();
+    dx=0;
+    dy=0;
+    if(isUp)dy-=1;
+    if(isDown)dy+=1;
+    if(isLeft)dx-=1;
+    if(isRight)dx+=1;
+    if(dx==0){
+        if(dy==-1)walkDirection="上";
+        if(dy==1)walkDirection="下";
+    }
+    if(dy==0){
+        if(dx==-1)walkDirection="左";
+        if(dx==1)walkDirection="右";
+    }
+    if(dx!=0||dy!=0)walkCnt+=1;
+    else walkCnt=0;
+    if(x+dx<0||WIDTH-charaW<x+dx)dx=0;
+    if(y+dy<0||HEIGHT-charaH<y+dy)dy=0;
+    x+=dx;
+    y+=dy;
+    drawHero();
+    await wait(20);
+}
+function drawHero(){
+    var interval=5;
+    var cnt=Math.floor((walkCnt+2*interval)/interval)%4+1;
+    img(walkDirection+cnt+".png",x,y,charaW,charaH);
+}
+
+//ここまで
+})()
+    </script>
+</body>
+</html>
